@@ -1,6 +1,4 @@
-﻿// Learn more about F# at http://fsharp.org
-
-module aoc2018
+﻿module aoc2018
 
 open System
 open System.IO
@@ -12,12 +10,16 @@ module Utils =
 
 module Day1 = 
     let solve freqs (input: string list) = 
-        let folder freqs' value = freqs'@[List.last freqs' + value]
+        let folder freqs' value = 
+            let next = List.last freqs' + value
+            if (List.contains next freqs') then printfn "%A" next else next |> ignore
+            freqs'@[next]
         input |> List.map Int32.Parse |> List.fold folder freqs
     let solve1 = solve [0] >> List.last 
     let solve2 input =
         let rec solve2' solved =
-            match solved |> List.countBy id |> List.tryFind (fun x -> snd x > 1) with
+            let morethanone = solved |> List.countBy id |> List.filter (fun x -> snd x > 1)
+            match morethanone |> List.tryHead with
             | Some twice -> twice |> fst
             | None -> solve2' (solve solved input)
         solve2' (solve [0] input)    

@@ -26,6 +26,16 @@ module Day1 =
 
     let decide = function | "2" -> solve2 | "1" | _ -> solve1
 
+
+module Day2 = 
+    let solve (input: string list) =
+        let mapped = input |> List.map (Seq.countBy id >> Seq.map snd)
+        let findtimes times = mapped |> List.sumBy (fun s -> if Seq.contains times s then 1 else 0)
+        findtimes 2 * findtimes 3
+    let solve1 = solve
+    let solve2 = solve
+    let decide = function | "2" -> solve2 | "1" | _ -> solve1
+
 [<EntryPoint>]
 let main argv =
     let day = argv |> Array.head
@@ -34,6 +44,7 @@ let main argv =
     let decider day = 
         match day with
         | "1" -> Day1.decide
+        | "2" -> Day2.decide
         | _ -> failwith "wrong day"
     
     let solver = part |> (decider day)
